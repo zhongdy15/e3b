@@ -16,7 +16,7 @@ import os
 import pdb
 import numpy as np
 os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["CUDA_VISIBLE_DEVICES"] = "5"
+os.environ["CUDA_VISIBLE_DEVICES"] = "7"
 
 
 def main(flags):

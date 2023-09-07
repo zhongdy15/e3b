@@ -313,6 +313,7 @@ def act(i: int,
         while True:
             # index = 0
             index = free_queue.get()
+            # print("index:"+str(index))
             if index is None:
                 break
 

@@ -307,6 +307,7 @@ def train(flags):
 
     def batch_and_learn(i, lock=threading.Lock()):
         """Thread target for the learning process."""
+        # print("threading:"+str(i))
         nonlocal frames, stats
         timings = prof.Timings()
         
