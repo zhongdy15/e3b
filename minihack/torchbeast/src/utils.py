@@ -308,7 +308,10 @@ def act(i: int,
         step = 0
 
 
+        # collect a batch for index-th buffer, with T(unroll_lenth) + 1 logs
+        # the first log is from the old rollout endn
         while True:
+            # index = 0
             index = free_queue.get()
             if index is None:
                 break

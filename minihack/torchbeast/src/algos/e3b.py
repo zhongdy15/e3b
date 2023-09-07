@@ -233,14 +233,20 @@ def train(flags):
         for t in state:
             t.share_memory_()
         initial_agent_state_buffers.append(state)
-
+    # from torch import multiprocessing as mp
     actor_processes = []
     ctx = mp.get_context('fork')
     free_queue = ctx.Queue()
     full_queue = ctx.Queue()
 
     episode_state_count_dict = dict()
-    
+
+    # for test in main thread
+    # i = 0
+    # act(i, free_queue, full_queue, model, elliptical_encoder, buffers,
+    #               episode_state_count_dict, None,
+    #               initial_agent_state_buffers, flags)
+
     for i in range(flags.num_actors):
         actor = ctx.Process(
             target=act,

@@ -2,7 +2,7 @@
 
 from src.arguments import parser 
 
-from src.algos.torchbeast import train as train_vanilla 
+from src.algos.torchbeast import train as train_vanilla
 from src.algos.count import train as train_count
 from src.algos.curiosity import train as train_curiosity 
 from src.algos.rnd import train as train_rnd
@@ -16,6 +16,7 @@ import os
 import pdb
 import numpy as np
 os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "5"
 
 
 def main(flags):
