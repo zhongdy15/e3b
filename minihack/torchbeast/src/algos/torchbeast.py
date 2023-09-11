@@ -191,7 +191,8 @@ def train(flags):
 
 
     if 'MiniHack' in flags.env:
-        learner_model = models.NetHackPolicyNet(env.observation_space, env.action_space.n, flags.use_lstm, hidden_dim=flags.hidden_dim, sphere_norm=flags.sphere_norm).to(flags.device)
+        # learner_model = models.NetHackPolicyNet(env.observation_space, env.action_space.n, flags.use_lstm, hidden_dim=flags.hidden_dim, sphere_norm=flags.sphere_norm).to(flags.device)
+        learner_model = models.NetHackPolicyNet(env.observation_space, env.action_space.n, flags.use_lstm, hidden_dim=flags.hidden_dim).to(flags.device)
     else:
         raise Exception('Only MiniGrid is suppported Now!')
 
