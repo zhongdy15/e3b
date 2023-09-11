@@ -25,6 +25,12 @@ To train icm, run:
 OMP_NUM_THREADS=1 python main.py  --learning_rate 0.0001 --model curiosity --episodic_bonus_type counts-obs --forward_loss_coef 1.0 --inverse_loss_coef 0.1 --savedir ./results/icm/ --env MiniHack-MultiRoom-N6-v0 --intrinsic_reward_coef 0.1 --seed 1 --num_actors 16 --num_buffers 16
 ```
 
+To train impala, run:
+
+```
+OMP_NUM_THREADS=1 python main.py  --learning_rate 0.0001 --model vanilla --env MiniHack-MultiRoom-N6-v0 --savedir ./results/impala/ --seed 1 --num_actors 16 --num_buffers 16
+```
+
 
 
 

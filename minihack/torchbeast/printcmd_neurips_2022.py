@@ -113,7 +113,7 @@ ALL_TASKS = ["MiniHack-MultiRoom-N6-v0"]
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--task', default='train-icm')#'train-elliptical')
+    parser.add_argument('--task', default='train-impala')#'train-elliptical')
     parser.add_argument('--queue', default='')
     parser.add_argument('--dry', action='store_true')
     parser.add_argument('--indx', type=int, default=-1)
