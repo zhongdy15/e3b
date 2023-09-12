@@ -273,7 +273,8 @@ def train(flags):
         actor = ctx.Process(
             target=act,
             args=(i, free_queue, full_queue, model, None, buffers, 
-                  episode_state_count_dict, initial_agent_state_buffers, flags))
+                  episode_state_count_dict, None,
+                  initial_agent_state_buffers, flags))
         actor.start()
         actor_processes.append(actor)
 
