@@ -8,21 +8,15 @@ from torch.autograd import grad
 import scipy
 
 
-alpha_initial = .5
-beta_initial = 2
+alpha = 1.0
+beta = 1.0
 
-alpha = alpha_initial
-beta = beta_initial
-
-num_iterations = 100
-step_lenth = 0.01
-batch_size = 1024
+num_iterations = 10000
+step_lenth = 0.0001
+batch_size = 256
 
 net = InvNetwork()
 net.load_state_dict(torch.load('my_network_4.pth'))
-
-
-
 
 for iteration in range(num_iterations):
     s = np.zeros(batch_size, dtype=np.float32)
@@ -30,8 +24,7 @@ for iteration in range(num_iterations):
     # random_sample = np.random.normal(size=batch_size)
     # e = (np.tanh(random_sample) + 1) / 2
     e = np.random.uniform(0, 1, batch_size)
-    with torch.no_grad():
-        s_prime = reshapeaction_transition(e, alpha, beta)  # 实时生成数据
+    s_prime = reshapeaction_transition(e, alpha, beta)  # 实时生成数据
     a = scipy.special.betaincinv(alpha, beta, e)
 
     alpha_ndarry = alpha * np.ones(batch_size, dtype=np.float32)
@@ -65,33 +58,18 @@ for iteration in range(num_iterations):
     di_logp_alpha = grad_alpha.detach().numpy()
     di_logp_beta = grad_beta.detach().numpy()
 
-    # 梯度方向
-    J_gradient_alpha = -(alpha_constant * logp + di_logp_alpha)
-    J_gradient_beta = -(beta_costant * logp + di_logp_beta)
-
-    # J_gradient_alpha = alpha_constant * logp
-    # J_gradient_beta = beta_costant * logp
+    J_gradient_alpha = alpha_constant * logp + di_logp_alpha
+    J_gradient_beta = beta_costant * logp + di_logp_beta
 
     # J_gradient_alpha =  di_logp_alpha
     # J_gradient_beta =  di_logp_beta
 
     J_target = - logp.mean()
 
-    print(f"Iter {iteration} alpha: {alpha:.2f} beta: {beta:.2f} gradient_alpha: {J_gradient_alpha.mean():.2f} gradient_beta: {J_gradient_beta.mean():.2f} Target: {J_target:.2f}")
-    # print(f"Iter {iteration} gradient_alpha: {J_gradient_alpha.mean():.2f} gradient_beta: {J_gradient_beta.mean():.2f}")
-    # 5. 负梯度方向 更新 theta
-    # alpha = alpha + step_lenth * J_gradient_alpha.mean()
+    print(f"Iter {iteration} alpha: {alpha:.2f} beta: {beta:.2f} Target: {J_target:.2f}")
+    # 5. 更新 theta
+    alpha = alpha + step_lenth * J_gradient_alpha.mean()
     beta = beta + step_lenth * J_gradient_beta.mean()
-    # if J_gradient_alpha.mean() > 0:
-    #     alpha += step_lenth
-    # else:
-    #     alpha -= step_lenth
-
-    # if J_gradient_beta.mean() > 0:
-    #     beta += step_lenth
-    # else:
-    #     beta -= step_lenth
-
 
     if alpha < 0.1:
         alpha = 0.1
