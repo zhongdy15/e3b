@@ -40,8 +40,8 @@ def reshapeaction_transition(e,alpha=1.0,beta=1.0,randomness=0.0):
 
 if __name__ == '__main__':
     # 定义Beta分布的形状参数
-    a =0.1
-    b = 1.3
+    a =0.5
+    b = 0.5
 
     # 创建一个从0到1之间的一系列x值
     x = np.linspace(0, 1, 100)

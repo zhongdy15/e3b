@@ -7,9 +7,10 @@ import torch.distributions as dist
 from torch.autograd import grad
 import scipy
 import matplotlib.pyplot as plt
+from ar_train import policy_evaluation
 
-alpha = 0.1
-beta = 1.3
+alpha = .5
+beta = .5
 
 net = InvNetwork()
 net.load_state_dict(torch.load('my_network_4.pth'))
@@ -35,6 +36,8 @@ sigma = net(input_data)[1].squeeze()
 e_tensor = torch.tensor(x)
 log_likelihood = -0.5 * ((e_tensor - mu) / sigma) ** 2 - torch.log(sigma) - 0.5 * torch.log(2 * torch.tensor(np.pi))
 J = - log_likelihood.mean().item()
+
+_,_,J2 = policy_evaluation(alpha,beta,batch_size,net)
 
 predict_mean = mu.tolist()
 predict_var = sigma.tolist()
@@ -71,7 +74,7 @@ plt.grid(True)
 plt.legend()
 
 # 显示图形
-plt.title("J_target:  {:.2f}".format(J))
+plt.title("J_target:  {:.2f} J_target_2:  {:.2f}".format(J,J2))
 plt.tight_layout()
 plt.show()
 

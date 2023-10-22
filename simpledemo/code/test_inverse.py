@@ -7,9 +7,10 @@ import torch.distributions as dist
 from torch.autograd import grad
 import scipy
 import matplotlib.pyplot as plt
+from ar_train import policy_evaluation
 
-alpha = 1.
-beta = 1.
+alpha = .5
+beta = .5
 
 net = InvNetwork()
 net.load_state_dict(torch.load('my_network_4.pth'))
@@ -30,8 +31,16 @@ input_data[:, 3] = beta
 
 input_data = torch.from_numpy(input_data)
 
-predict_mean = net(input_data)[0].squeeze().tolist()
-predict_var = net(input_data)[1].squeeze().tolist()
+mu = net(input_data)[0].squeeze()
+sigma = net(input_data)[1].squeeze()
+e_tensor = torch.tensor(x)
+log_likelihood = -0.5 * ((e_tensor - mu) / sigma) ** 2 - torch.log(sigma) - 0.5 * torch.log(2 * torch.tensor(np.pi))
+J = - log_likelihood.mean().item()
+
+_,_,J2 = policy_evaluation(alpha,beta,batch_size,net)
+
+predict_mean = mu.tolist()
+predict_var = sigma.tolist()
 # 创建一个图形窗口
 plt.figure(figsize=(15, 5))
 
@@ -56,14 +65,16 @@ plt.legend()
 
 plt.subplot(1, 3, 3)
 plt.plot(x, betaincinv_values, label = "f function")
-plt.plot(x, transition_value_2, label='trans')
-plt.xlabel('a')
+plt.plot(x, transition_value_2, label='trans_a')
+plt.plot(x, transition_value, label='trans_e')
+plt.xlabel('a/e')
 plt.ylabel('s_prime')
 plt.title('trans')
 plt.grid(True)
 plt.legend()
 
 # 显示图形
+plt.title("J_target:  {:.2f} J_target_2:  {:.2f}".format(J,J2))
 plt.tight_layout()
 plt.show()
 
